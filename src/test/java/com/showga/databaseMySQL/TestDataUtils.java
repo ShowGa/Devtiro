@@ -1,0 +1,57 @@
+package com.showga.databaseMySQL;
+
+import com.showga.databaseMySQL.domain.Author;
+import com.showga.databaseMySQL.domain.Book;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+
+public final class TestDataUtils {
+
+    private TestDataUtils() {}
+
+//    public static <T> T createTestAuthor(int times) {
+//        List<Author> authors = new ArrayList<>();
+//
+//        for (int i = 0; i < times; i++) {
+//            authors.add(Author.builder()
+//                    .id(i + 1)
+//                    .name("ShowGa Hsiao " + (i + 1))
+//                    .age(20)
+//                    .build());
+//        }
+//
+//        return times == 1 ? (T) authors.get(0) : (T) authors; // 强制转换
+//    }
+
+    public static Author createTestAuthor() {
+
+        return Author.builder().id(1).name("ShowGa Hsiao").age(20).build();
+    }
+
+
+    public static Author createTestAuthor2() {
+
+        return Author.builder().id(2).name("ShowGa Hsiao2").age(20).build();
+    }
+
+    public static Author createTestAuthor3() {
+
+        return Author.builder().id(3).name("ShowGa Hsiao3").age(20).build();
+    }
+
+    public static Book createTestBook() {
+        return Book.builder().isbn("484-5454-4-1").title("ShowGod in the World").author_id(1).build();
+    }
+
+    public static Book createTestBook2() {
+        return Book.builder().isbn("484-5454-4-2").title("ShowGod in the World 2").author_id(1).build();
+    }
+
+    public static Book createTestBook3() {
+        return Book.builder().isbn("484-5454-4-3").title("ShowGod in the World 3").author_id(1).build();
+    }
+}
