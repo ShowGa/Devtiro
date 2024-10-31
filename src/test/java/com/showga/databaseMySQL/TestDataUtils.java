@@ -43,15 +43,15 @@ public final class TestDataUtils {
         return Author.builder().id(3).name("ShowGa Hsiao3").age(20).build();
     }
 
-    public static Book createTestBook() {
-        return Book.builder().isbn("484-5454-4-1").title("ShowGod in the World").author_id(1).build();
+    public static Book createTestBook(final Author author) {
+        return Book.builder().isbn("484-5454-4-1").title("ShowGod in the World").author(author).build();
     }
 
-    public static Book createTestBook2() {
-        return Book.builder().isbn("484-5454-4-2").title("ShowGod in the World 2").author_id(1).build();
+    public static Book createTestBook2(final Author author) {
+        return Book.builder().isbn("484-5454-4-2").title("ShowGod in the World 2").author(author).build();
     }
 
-    public static Book createTestBook3() {
-        return Book.builder().isbn("484-5454-4-3").title("ShowGod in the World 3").author_id(1).build();
+    public static Book createTestBook3(final Author author) {
+        return Book.builder().isbn("484-5454-4-3").title("ShowGod in the World 3").author(author).build();
     }
 }

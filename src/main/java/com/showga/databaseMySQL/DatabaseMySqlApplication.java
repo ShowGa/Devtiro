@@ -10,23 +10,23 @@ import javax.sql.DataSource;
 
 @SpringBootApplication
 @Log
-public class DatabaseMySqlApplication implements CommandLineRunner {
+public class DatabaseMySqlApplication {
 
-	private final DataSource dataSource;
+//	private final DataSource dataSource;
 
-    public DatabaseMySqlApplication(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+//    public DatabaseMySqlApplication(DataSource dataSource) {
+//        this.dataSource = dataSource;
+//    }
 
     public static void main(String[] args) {
 		SpringApplication.run(DatabaseMySqlApplication.class, args);
 	}
 
-	@Override
-	public void run(final String... args) {
-		log.info("Datasource: " + dataSource.toString());
-		final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
-		restTemplate.execute("select 1");
-	}
+//	@Override
+//	public void run(final String... args) {
+//		log.info("Datasource: " + dataSource.toString());
+//		final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
+//		restTemplate.execute("select 1");
+//	}
 
 }
