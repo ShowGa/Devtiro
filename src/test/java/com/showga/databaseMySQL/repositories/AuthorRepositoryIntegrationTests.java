@@ -70,15 +70,15 @@ public class AuthorRepositoryIntegrationTests {
         assertThat(result.get()).isEqualTo(author);
     }
 
-//    @Test
-//    public void testThatAuthorCanBeDeleted() {
-//        Author author = TestDataUtils.createTestAuthor();
-//        underTest.create(author);
-//        underTest.delete(author.getId());
-//        Optional<Author> result = underTest.findOne(author.getId());
-//
-//        System.out.println(result);
-//
-//        assertThat(result).isEmpty();
-//    }
+    @Test
+    public void testThatAuthorCanBeDeleted() {
+        Author author = TestDataUtils.createTestAuthor();
+        underTest.save(author);
+        underTest.deleteById(author.getId());
+        Optional<Author> result = underTest.findById(author.getId());
+
+        System.out.println(result);
+
+        assertThat(result).isEmpty();
+    }
 }
