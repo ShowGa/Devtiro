@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
+    Iterable<Author> ageLessThan(int age);
 }
