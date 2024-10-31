@@ -97,4 +97,19 @@ public class AuthorRepositoryIntegrationTests {
         assertThat(result).containsExactly(author, author2, author3);
 
     }
+
+    // 8 - 9 HQL
+    @Test
+    public void testThatGetAuthorWithAgeGreaterThan() {
+        Author author = TestDataUtils.createTestAuthor();
+        Author author2 = TestDataUtils.createTestAuthor2();
+        Author author3 = TestDataUtils.createTestAuthor3();
+        underTest.save(author);
+        underTest.save(author2);
+        underTest.save(author3);
+
+        Iterable<Author> result = underTest.findAuthorGreaterThan(15);
+
+        assertThat(result).containsExactly(author, author2, author3);
+    }
 }
