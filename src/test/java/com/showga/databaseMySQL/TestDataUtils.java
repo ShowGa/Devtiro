@@ -1,13 +1,7 @@
 package com.showga.databaseMySQL;
 
-import com.showga.databaseMySQL.domain.Author;
-import com.showga.databaseMySQL.domain.Book;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
+import com.showga.databaseMySQL.domain.entity.Author;
+import com.showga.databaseMySQL.domain.entity.Book;
 
 public final class TestDataUtils {
 

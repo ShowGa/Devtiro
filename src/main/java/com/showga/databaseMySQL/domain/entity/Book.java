@@ -1,4 +1,4 @@
-package com.showga.databaseMySQL.domain;
+package com.showga.databaseMySQL.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
