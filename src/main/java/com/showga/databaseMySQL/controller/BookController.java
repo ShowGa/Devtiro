@@ -6,10 +6,10 @@ import com.showga.databaseMySQL.mappers.Mapper;
 import com.showga.databaseMySQL.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class BookController {
@@ -37,4 +37,17 @@ public class BookController {
         return new ResponseEntity<>(bookMapper.mapTo(createdBookEntity), HttpStatus.CREATED);
 
     }
+
+    @GetMapping("/books")
+    public List<BookDto> findAllBooks() {
+
+        // get all the books from the database
+        List<Book> books = bookService.findAll();
+
+        // convert the data into MapDto and send to client
+        return books.stream().map(bookMapper::mapTo).collect(Collectors.toList());
+
+    }
+
+
 }
