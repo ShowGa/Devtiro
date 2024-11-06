@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.showga.databaseMySQL.TestDataUtils;
 import com.showga.databaseMySQL.domain.entity.Author;
+import com.showga.databaseMySQL.service.AuthorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -24,14 +25,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class AuthorControllerIntegrationTests {
 
+    private AuthorService authorService;
+
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
 
     @Autowired
-    public AuthorControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public AuthorControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, AuthorService authorService) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+        this.authorService = authorService;
     }
 
     // Test the response status
@@ -65,6 +69,35 @@ public class AuthorControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.name").value("ShowGa Hsiao")
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.age").value(20)
+        );
+    }
+
+    @Test
+    public void testThatFindAllAuthorsReturnsHttpStatus200() throws Exception {
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    public void testThatFindAllAuthorsSuccessfullyReturns() throws Exception {
+        // Create an Object in m2 database
+        Author author1 = TestDataUtils.createTestAuthor();
+        authorService.createAuthor(author1);
+
+        // check find and return the data successfully
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].name").value("ShowGa Hsiao")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].age").value(20)
         );
     }
 }
