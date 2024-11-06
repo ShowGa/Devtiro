@@ -1,5 +1,7 @@
 package com.showga.databaseMySQL;
 
+import com.showga.databaseMySQL.domain.dto.AuthorDto;
+import com.showga.databaseMySQL.domain.dto.BookDto;
 import com.showga.databaseMySQL.domain.entity.Author;
 import com.showga.databaseMySQL.domain.entity.Book;
 
@@ -47,5 +49,9 @@ public final class TestDataUtils {
 
     public static Book createTestBook3(final Author author) {
         return Book.builder().isbn("484-5454-4-3").title("ShowGod in the World 3").author(author).build();
+    }
+
+    public static BookDto createTestBookDto(final AuthorDto authorDto) {
+        return BookDto.builder().isbn("484-5454-4-3").title("ShowGod in the World 3").author(authorDto).build();
     }
 }
