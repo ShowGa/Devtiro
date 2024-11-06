@@ -1,9 +1,10 @@
 package com.showga.databaseMySQL.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.showga.databaseMySQL.TestDataUtils;
 import com.showga.databaseMySQL.domain.dto.BookDto;
+import com.showga.databaseMySQL.domain.entity.Book;
+import com.showga.databaseMySQL.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.print.attribute.standard.Media;
+
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith(SpringExtension.class)
@@ -26,10 +29,13 @@ public class BookControllerIntegrationTests {
 
     private ObjectMapper objectMapper;
 
+    private BookService bookService;
+
     @Autowired
-    public BookControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public BookControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, BookService bookService) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+        this.bookService = bookService;
     }
 
     @Test
@@ -64,5 +70,34 @@ public class BookControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.title").value(bookDto.getTitle())
         );
+    }
+
+    @Test
+    public void testThatFindAllBooksReturnHttpStatus200() throws Exception {
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatFindAllBooksSuccessfullyReturns() throws Exception {
+
+        // Create book in the memory database
+        Book createdBook = TestDataUtils.createTestBook(null);
+        bookService.createBook(createdBook.getIsbn(), createdBook);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value("484-5454-4-1")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].title").value("ShowGod in the World")
+        );
+
     }
 }
