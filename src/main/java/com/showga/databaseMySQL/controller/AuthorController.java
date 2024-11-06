@@ -6,9 +6,13 @@ import com.showga.databaseMySQL.mappers.Mapper;
 import com.showga.databaseMySQL.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class AuthorController {
@@ -36,5 +40,15 @@ public class AuthorController {
         // Change the created author (Author Entity) to AuthorDto and return
 
         return new ResponseEntity<>(authorMapper.mapTo(createdAuthorEntity1), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/authors")
+    public List<AuthorDto> getAllAuthors() {
+        // get all the authors from database
+        List<Author> authors = authorService.findAll();
+
+        // convert the data into MapDto and send to client
+        return authors.stream().map(authorMapper::mapTo).collect(Collectors.toList());
+
     }
 }
