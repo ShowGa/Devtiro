@@ -6,12 +6,10 @@ import com.showga.databaseMySQL.mappers.Mapper;
 import com.showga.databaseMySQL.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,5 +48,18 @@ public class AuthorController {
         // convert the data into MapDto and send to client
         return authors.stream().map(authorMapper::mapTo).collect(Collectors.toList());
 
+    }
+
+    @GetMapping(path = "/author/{id}")
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable("id") Integer authorId) {
+        // author service find one
+        Optional<Author> foundAuthor = authorService.findOne(authorId);
+
+        // convert the Entity to Dto and send back
+        // reason to use ResponseEntity is to specify the response status
+        return foundAuthor.map(author -> {
+            AuthorDto authorDto = authorMapper.mapTo(author);
+            return new ResponseEntity<>(authorDto, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
