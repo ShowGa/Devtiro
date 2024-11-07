@@ -100,4 +100,34 @@ public class BookControllerIntegrationTests {
         );
 
     }
+
+    @Test
+    public void testThatFindOneBookReturnHttpStatus200() throws Exception {
+
+        Book testBook = TestDataUtils.createTestBook(null);
+        bookService.createBook(testBook.getIsbn(), testBook);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/book/" + testBook.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatFindOneBookReturnsHttp404WhenBookDoesNotExist() throws Exception {
+
+        // Create book in the memory database
+        Book testBook = TestDataUtils.createTestBook(null);
+//        bookService.createBook(createdBook.getIsbn(), createdBook);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/book/" + testBook.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+
+    }
 }
