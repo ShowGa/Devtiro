@@ -100,4 +100,36 @@ public class AuthorControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$[0].age").value(20)
         );
     }
+
+    @Test
+    public void testThatFindOneAuthorReturnsHttpStatus200() throws Exception {
+
+        Author testAuthor = TestDataUtils.createTestAuthor();
+        authorService.createAuthor(testAuthor);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/author/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    public void testThatFindOneAuthorsSuccessfullyReturns() throws Exception {
+        // Create an Object in m2 database
+        Author author1 = TestDataUtils.createTestAuthor();
+        authorService.createAuthor(author1);
+
+        // check find and return the data successfully
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/author/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(1)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("ShowGa Hsiao")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(20)
+        );
+    }
 }
