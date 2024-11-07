@@ -33,7 +33,7 @@ public class AuthorController {
         Author authorEntity = authorMapper.mapFrom(author);
 
         // get the created data from the Service (JpaRepository operation)
-        Author createdAuthorEntity1 = authorService.createAuthor(authorEntity);
+        Author createdAuthorEntity1 = authorService.save(authorEntity);
 
         // Change the created author (Author Entity) to AuthorDto and return
 
@@ -61,5 +61,25 @@ public class AuthorController {
             AuthorDto authorDto = authorMapper.mapTo(author);
             return new ResponseEntity<>(authorDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDto> fullUpdateAuthor(
+            @PathVariable("id") Integer id,
+            @RequestBody AuthorDto authorDto
+    ) {
+
+        // create isExists authorService to check if the author was existed
+        if (!authorService.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        };
+
+        // Yes -> going for update
+        authorDto.setId(id);
+        Author author = authorMapper.mapFrom(authorDto);
+
+        Author savedAuthor = authorService.save(author);
+
+        return new ResponseEntity<>(authorMapper.mapTo(savedAuthor), HttpStatus.OK);
     }
 }

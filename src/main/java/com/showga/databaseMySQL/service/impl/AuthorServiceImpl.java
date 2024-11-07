@@ -21,7 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author createAuthor(Author author) {
+    public Author save(Author author) {
 
         // Spring JPA auto does
         return authorRepository.save(author);
@@ -35,6 +35,13 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Optional<Author> findOne(Integer authorId) {
         return authorRepository.findById(authorId);
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+
+        return authorRepository.existsById(id);
+
     }
 
 }

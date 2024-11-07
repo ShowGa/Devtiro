@@ -1,16 +1,13 @@
 package com.showga.databaseMySQL.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.showga.databaseMySQL.TestDataUtils;
 import com.showga.databaseMySQL.domain.entity.Author;
 import com.showga.databaseMySQL.service.AuthorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -86,7 +83,7 @@ public class AuthorControllerIntegrationTests {
     public void testThatFindAllAuthorsSuccessfullyReturns() throws Exception {
         // Create an Object in m2 database
         Author author1 = TestDataUtils.createTestAuthor();
-        authorService.createAuthor(author1);
+        authorService.save(author1);
 
         // check find and return the data successfully
         mockMvc.perform(
@@ -105,7 +102,7 @@ public class AuthorControllerIntegrationTests {
     public void testThatFindOneAuthorReturnsHttpStatus200() throws Exception {
 
         Author testAuthor = TestDataUtils.createTestAuthor();
-        authorService.createAuthor(testAuthor);
+        authorService.save(testAuthor);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/author/1")
@@ -118,7 +115,7 @@ public class AuthorControllerIntegrationTests {
     public void testThatFindOneAuthorsSuccessfullyReturns() throws Exception {
         // Create an Object in m2 database
         Author author1 = TestDataUtils.createTestAuthor();
-        authorService.createAuthor(author1);
+        authorService.save(author1);
 
         // check find and return the data successfully
         mockMvc.perform(
