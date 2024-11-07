@@ -1,5 +1,6 @@
 package com.showga.databaseMySQL.controller;
 
+import com.showga.databaseMySQL.domain.dto.AuthorDto;
 import com.showga.databaseMySQL.domain.dto.BookDto;
 import com.showga.databaseMySQL.domain.entity.Book;
 import com.showga.databaseMySQL.mappers.Mapper;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,5 +51,18 @@ public class BookController {
 
     }
 
+    @GetMapping("/book/{isbn}")
+    public ResponseEntity<BookDto> findOneBook(@PathVariable("isbn") String isbn) {
 
+        // get the book
+        Optional<Book> foundBook = bookService.findOne(isbn);
+
+        // convert the Entity to Dto and send back
+        // reason to use ResponseEntity is to specify the response status
+        return foundBook.map(book -> {
+            BookDto bookDto = bookMapper.mapTo(book);
+            return new ResponseEntity<>(bookDto, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    }
 }
