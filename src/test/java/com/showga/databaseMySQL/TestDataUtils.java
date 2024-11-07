@@ -39,6 +39,10 @@ public final class TestDataUtils {
         return Author.builder().id(3).name("ShowGa Hsiao3").age(20).build();
     }
 
+    public static AuthorDto createTestAuthorDto() {
+        return AuthorDto.builder().id(1).name("ShowGa Hsiao").age(20).build();
+    }
+
     public static Book createTestBook(final Author author) {
         return Book.builder().isbn("484-5454-4-1").title("ShowGod in the World").author(author).build();
     }

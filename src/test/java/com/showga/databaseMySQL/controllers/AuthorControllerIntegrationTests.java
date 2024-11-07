@@ -2,6 +2,7 @@ package com.showga.databaseMySQL.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.showga.databaseMySQL.TestDataUtils;
+import com.showga.databaseMySQL.domain.dto.AuthorDto;
 import com.showga.databaseMySQL.domain.entity.Author;
 import com.showga.databaseMySQL.service.AuthorService;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,6 @@ public class AuthorControllerIntegrationTests {
 
     @Test
     public void testThatFindAllAuthorsSuccessfullyReturns() throws Exception {
-        // Create an Object in m2 database
         Author author1 = TestDataUtils.createTestAuthor();
         authorService.save(author1);
 
@@ -129,4 +129,59 @@ public class AuthorControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.age").value(20)
         );
     }
+
+    @Test
+    public void testThatFullUpdateAuthorReturnsHttpStatus404() throws Exception {
+        AuthorDto testAuthorDto = TestDataUtils.createTestAuthorDto();
+        String authorDtoJson = objectMapper.writeValueAsString(testAuthorDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/author/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(authorDtoJson)
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
+    @Test
+    public void testThatFullUpdateAuthorReturnsHttpStatus200() throws Exception {
+        Author testAuthor = TestDataUtils.createTestAuthor();
+        Author savedAuthor = authorService.save(testAuthor);
+
+        AuthorDto testAuthorDto = TestDataUtils.createTestAuthorDto();
+        String authorDtoJson = objectMapper.writeValueAsString(testAuthorDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/author/" + savedAuthor.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(authorDtoJson)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    public void testThatFullUpdateExistingAuthor() throws Exception {
+        // Create an Object in m2 database
+        Author testAuthor = TestDataUtils.createTestAuthor();
+        Author savedAuthor = authorService.save(testAuthor);
+
+        Author testAuthor2 = TestDataUtils.createTestAuthor2();
+        testAuthor2.setId(savedAuthor.getId());
+
+        String authorDtoUpdateJson = objectMapper.writeValueAsString(testAuthor2);
+
+        // check find and return the data successfully
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/authors/" + savedAuthor.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(authorDtoUpdateJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedAuthor.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthor2.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(testAuthor2.getAge())
+        );
+    }
+
 }
