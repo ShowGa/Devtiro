@@ -1,9 +1,11 @@
 package com.showga.databaseMySQL.controller;
 
+import com.showga.databaseMySQL.domain.dto.AuthorDto;
 import com.showga.databaseMySQL.domain.dto.BookDto;
 import com.showga.databaseMySQL.domain.entity.Book;
 import com.showga.databaseMySQL.mappers.Mapper;
 import com.showga.databaseMySQL.service.BookService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +74,22 @@ public class BookController {
             return new ResponseEntity<>(bookDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+    }
+
+    @PatchMapping(path = "/book/{isbn}")
+    public ResponseEntity<BookDto> partialUpdate(
+            @PathVariable String isbn,
+            @RequestBody BookDto bookDto
+    ) {
+        boolean bookExists = bookService.isExists(isbn);
+        if (!bookExists) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Convert bookDto to bookEntity
+        Book bookEntity = bookMapper.mapFrom(bookDto);
+        Book patchedBook = bookService.partialUpdate(isbn, bookEntity);
+
+        return new ResponseEntity<>(bookMapper.mapTo(patchedBook), HttpStatus.OK);
     }
 }

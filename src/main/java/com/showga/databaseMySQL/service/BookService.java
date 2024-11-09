@@ -1,5 +1,6 @@
 package com.showga.databaseMySQL.service;
 
+import com.showga.databaseMySQL.domain.dto.BookDto;
 import com.showga.databaseMySQL.domain.entity.Book;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface BookService {
     Optional<Book> findOne(String isbn);
 
     boolean isExists(String isbn);
+
+    Book partialUpdate(String isbn, Book book);
 }
