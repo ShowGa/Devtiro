@@ -1,6 +1,5 @@
 package com.showga.databaseMySQL.controller;
 
-import com.showga.databaseMySQL.domain.dto.AuthorDto;
 import com.showga.databaseMySQL.domain.dto.BookDto;
 import com.showga.databaseMySQL.domain.entity.Book;
 import com.showga.databaseMySQL.mappers.Mapper;
@@ -32,12 +31,21 @@ public class BookController {
         // map the bookDto to book entity
         Book bookEntity = bookMapper.mapFrom(bookDto);
 
+        // check before save
+        Boolean isExists = bookService.isExists(isbn);
+
         // create the book and return the data
-        Book createdBookEntity = bookService.createBook(isbn, bookEntity);
+        Book createdBookEntity = bookService.createUpdateBook(isbn, bookEntity);
+        // mapping
+        BookDto savedUpdatedBookDto = bookMapper.mapTo(createdBookEntity);
 
-        // convert the data entity to BookDto and send to client
-        return new ResponseEntity<>(bookMapper.mapTo(createdBookEntity), HttpStatus.CREATED);
-
+        if (isExists) {
+            // update
+            return new ResponseEntity<>(bookMapper.mapTo(createdBookEntity), HttpStatus.OK);
+        } else {
+            // convert the data entity to BookDto and send to client
+            return new ResponseEntity<>(bookMapper.mapTo(createdBookEntity), HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/books")

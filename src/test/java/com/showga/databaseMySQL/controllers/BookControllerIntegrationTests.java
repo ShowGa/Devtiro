@@ -17,8 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.print.attribute.standard.Media;
-
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith(SpringExtension.class)
@@ -88,7 +86,7 @@ public class BookControllerIntegrationTests {
 
         // Create book in the memory database
         Book createdBook = TestDataUtils.createTestBook(null);
-        bookService.createBook(createdBook.getIsbn(), createdBook);
+        bookService.createUpdateBook(createdBook.getIsbn(), createdBook);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/books")
@@ -105,7 +103,7 @@ public class BookControllerIntegrationTests {
     public void testThatFindOneBookReturnHttpStatus200() throws Exception {
 
         Book testBook = TestDataUtils.createTestBook(null);
-        bookService.createBook(testBook.getIsbn(), testBook);
+        bookService.createUpdateBook(testBook.getIsbn(), testBook);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/book/" + testBook.getIsbn())
