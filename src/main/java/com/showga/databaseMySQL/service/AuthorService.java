@@ -16,4 +16,6 @@ public interface AuthorService {
     boolean isExists(Integer id);
 
     Author partialUpdate(Integer id, Author authorEntity);
+
+    void delete(Integer id);
 }
